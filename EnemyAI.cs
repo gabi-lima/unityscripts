@@ -29,8 +29,8 @@ public class EnemyAI : MonoBehaviour
                 // O inimigo está longe do jogador, então vamos persegui-lo
                 navMeshAgent.SetDestination(player.position);
                 navMeshAgent.speed = movementSpeed;
-                //animator.SetBool("isWalking", true);
-                //animator.SetBool("isAttacking", false);
+                animator.SetBool("isWalking", true);
+                animator.SetBool("isAttacking", false);
                 isAttacking = false;
             }
             else
@@ -38,7 +38,7 @@ public class EnemyAI : MonoBehaviour
                 // O inimigo está perto o suficiente para atacar
                 navMeshAgent.SetDestination(transform.position);
                 navMeshAgent.speed = 0f;
-                //animator.SetBool("isWalking", false);
+                animator.SetBool("isWalking", false);
 
                 if (!isAttacking)
                 {

@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     {
         
         currentHealth = maxHealth;
-        
+        Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     public void TakeDamage(int amount)
