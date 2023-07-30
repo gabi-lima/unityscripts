@@ -6,12 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     public int maxHealth = 100;
     private int currentHealth;
+    public int damageAmount = 20;
+   
 
    
     // Start is called before the first frame update
     void Start()
     {
-        
         currentHealth = maxHealth;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+    
     }
     private void Die()
     {
@@ -37,5 +38,13 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player died!");
         // Para este exemplo, vamos apenas desativar o GameObject do jogador.
         gameObject.SetActive(false);
+    }
+
+    void OnTriggerEnter(Collider collider){
+        if(collider.gameObject.tag == "hand"){
+            TakeDamage(damageAmount);
+            Debug.Log(currentHealth);
+            
+        }
     }
 }

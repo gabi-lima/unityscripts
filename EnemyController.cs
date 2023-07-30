@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    private Animator animator;
     public int maxHealth = 100;
     private int currentHealth;
-    public int damageAmount = 20;
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;
+    public bool isDead;
 
     private void Start()
     {
         currentHealth = maxHealth;
+        animator = GetComponent<Animator>();
+        isDead = false;
     }
 
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        Debug.Log(this.currentHealth);
         if (currentHealth <= 0)
         {
             Die();
@@ -25,22 +30,11 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {   
         Debug.Log("Boneco morreu!");
-        // Aqui você pode adicionar qualquer comportamento que deseja quando o inimigo morrer.
-        // Por exemplo, você pode reproduzir uma animação de morte, dar pontos ao jogador, etc.
-        Destroy(gameObject);
+        animator.SetBool("isDead", true);
+        isDead = true;
+        
+
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // Se o inimigo colidir com o jogador, causar dano ao jogador.
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                Debug.Log("Dano!");
-                player.TakeDamage(damageAmount);
-            }
-        }
-    }
+    
 }
