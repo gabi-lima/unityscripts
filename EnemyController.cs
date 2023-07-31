@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
     private UnityEngine.AI.NavMeshAgent navMeshAgent;
     public bool isDead;
 
+  
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -32,6 +34,14 @@ public class EnemyController : MonoBehaviour
         Debug.Log("Boneco morreu!");
         animator.SetBool("isDead", true);
         isDead = true;
+        Destroy(gameObject, 5f);
+        
+        // Obtém o componente Spawner e solicita a remoção do zumbi da lista
+        Spawner spawner = FindObjectOfType<Spawner>();
+        if (spawner != null)
+        {
+            spawner.RemoveZumbi(gameObject);
+        }
         
 
     }
