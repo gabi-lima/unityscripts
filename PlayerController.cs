@@ -1,50 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+
+
 
 public class PlayerController : MonoBehaviour
 {
-    public int maxHealth = 100;
-    private int currentHealth;
-    public int damageAmount = 20;
-   
+    public bool kick;
+    public bool podeChutar;
+    private bool reiniciando;
 
-   
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentHealth = maxHealth;
-        Cursor.lockState = CursorLockMode.Locked;
+    public bool fogo;
 
-    }
-
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount;
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-    // Update is called once per frame
-    void Update()
-    {
+    public bool fogo2;
     
-    }
-    private void Die()
-    {
-        // Aqui você pode adicionar qualquer comportamento que deseja quando o jogador morrer.
-        // Por exemplo, você pode reproduzir uma animação de morte, exibir uma tela de Game Over, etc.
-        Debug.Log("Player died!");
-        // Para este exemplo, vamos apenas desativar o GameObject do jogador.
-        gameObject.SetActive(false);
-    }
+    public bool fogo3;
 
-    void OnTriggerEnter(Collider collider){
-        if(collider.gameObject.tag == "hand"){
-            TakeDamage(damageAmount);
-            Debug.Log(currentHealth);
+    [SerializeField] Animator animator;
+    private void Start(){
+        
+        Cursor.lockState = CursorLockMode.Confined;
+        kick = false;
+        fogo = false;
+
+
+        
+    }
+    private void Update(){
+        if (Input.GetKeyDown(KeyCode.R)){
+            animator.SetBool("Reiniciando", true);
+            animator.SetBool("Kick", false);
+            StartCoroutine(ResetAnim());
+            Debug.Log("Fogo é: " + fogo);
             
         }
+
+        if (kick && podeChutar){
+            animator.SetBool("Kick", true);
+        }
+        if (!kick){
+            animator.SetBool("Kick", false);
+        }
+        
+    }
+
+    IEnumerator ResetAnim(){ 
+        yield return new WaitForSeconds(1f);
+        reiniciando = false;
+        animator.SetBool("Reiniciando", false);
+        animator.SetBool("Kick", false);
+
+
     }
 }

@@ -15,14 +15,15 @@ public class Bola : MonoBehaviour
 
     public Transform Goleiro;
 
+    public GoalController goal;
     private GoleiroController controladorGoleiro;
     public GameObject hud;
     public Image barra;
 
+
     public PlayerController player;
 
    [SerializeField] private AudioSource audioData;
-
 
     void Start()
     {
@@ -34,7 +35,14 @@ public class Bola : MonoBehaviour
 
     void Update()
     {
-        
+        if (goal.marker1 == true){
+            player.fogo = true;
+        }
+
+        if (goal.marker2 == true){
+            player.fogo3 = true;
+        }
+
         if (!EstaProximoDoJogador())
         {
             trajetoriaRenderer.enabled = false;
@@ -77,10 +85,11 @@ public class Bola : MonoBehaviour
             // Verifica se o botão esquerdo do mouse foi solto
             if (Input.GetMouseButtonUp(0))
             {
-                player.kick = true;
                 // Verifica se a bola está próxima a um objeto com a tag "Player"
                 if (EstaProximoDoJogador())
                 {
+                    player.kick = true;
+                    player.podeChutar = true;
                     // Chama a função Chutar passando a força proporcional ao tempo pressionado e a direção do chute
                     StartCoroutine (Chutar(forcaInicial + Mathf.Min(tempoPressionado, 1f) * (forcaMaxima - forcaInicial), direcaoChute));
                 }
@@ -131,9 +140,19 @@ public class Bola : MonoBehaviour
     {
         yield return new WaitForSeconds(0.8f);
         // Aplica a força ao Rigidbody da bola na direção calculada
+        if (Input.GetKey(KeyCode.LeftShift)){
+            Rigidbody rb = GetComponent<Rigidbody>();
+            float curvaMultiplier = 10f; // Ajuste conforme necessário
+            Vector3 curvaForce = -transform.right * curvaMultiplier; // Assume que a curva é na direção da direita
+            rb.AddForce(curvaForce, ForceMode.Impulse); // Use ForceMode.VelocityChange se desejar um ajuste instantâneo na velocidade
+        }
         GetComponent<Rigidbody>().AddForce(direcao * forca, ForceMode.Impulse);
         player.kick = false;
         PlayAudio();
+
+        Debug.Log(forca);
+
+        
 
         
 
@@ -171,6 +190,8 @@ public class Bola : MonoBehaviour
 
         // Aplica uma força para desacelerar a bola
         GetComponent<Rigidbody>().AddForce(-direcaoRefletida * 10f, ForceMode.Impulse); // Aplica uma força de 10 Newtons na direção oposta à direção da bola
+
+        player.fogo = false;
     }
     
 }
